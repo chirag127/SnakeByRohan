@@ -60,13 +60,12 @@ def welcome():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit_game = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    pygame.mixer.music.fadeout(200)
-                    pygame.mixer.music.load('music/bgm.mp3')
-                    pygame.mixer.music.play(100)
-                    pygame.mixer.music.set_volume(.6)
-                    gameloop()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                pygame.mixer.music.fadeout(200)
+                pygame.mixer.music.load('music/bgm.mp3')
+                pygame.mixer.music.play(100)
+                pygame.mixer.music.set_volume(.6)
+                gameloop()
         pygame.display.update()
         clock.tick(60)
 
@@ -84,18 +83,15 @@ def gameloop():
     velocity_y = 0
     snk_list = []
     snk_length = 1
-
 # Highscore Build
     if(not os.path.exists("highscore.txt")):
         with open("highscore.txt", "w") as f:
             f.write("0")
     with open("highscore.txt", "r") as f:
         highscore = f.read()
-
 # Food
     food_x = random.randint(20, screen_width / 2)
     food_y = random.randint(20, screen_height / 2)
-
 # Game Variables
     score = 0
     init_velocity = 5
@@ -105,17 +101,18 @@ def gameloop():
         if game_over:
             with open("highscore.txt", "w") as f:
                 f.write(str(highscore))
-
 # GameOverscreen
 
             gameWindow.blit(outro, (0, 0))
-            text_screen("Score: " + str(score), snakegreen, 385, 350)
+            text_screen(f"Score: {str(score)}", snakegreen, 385, 350)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit_game = True
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        welcome()
+                if (
+                    event.type == pygame.KEYDOWN
+                    and event.key == pygame.K_RETURN
+                ):
+                    welcome()
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -145,13 +142,16 @@ def gameloop():
                 if score > int(highscore):
                     highscore = score
             gameWindow.blit(bg2, (0, 0))
-            text_screen("Score: " + str(score) + "  Highscore: " +
-                        str(highscore),  snakegreen, 5, 5)
+            text_screen(
+                (f"Score: {str(score)}  Highscore: " + str(highscore)),
+                snakegreen,
+                5,
+                5,
+            )
+
             pygame.draw.rect(gameWindow, red, [
                              food_x, food_y, snake_size, snake_size])
-            head = []
-            head.append(snake_x)
-            head.append(snake_y)
+            head = [snake_x, snake_y]
             snk_list.append(head)
 
             if len(snk_list) > snk_length:
