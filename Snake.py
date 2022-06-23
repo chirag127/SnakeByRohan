@@ -143,11 +143,12 @@ def gameloop():
                     highscore = score
             gameWindow.blit(bg2, (0, 0))
             text_screen(
-                (f"Score: {str(score)}  Highscore: " + str(highscore)),
+                f"Score: {str(score)}  Highscore: {str(highscore)}",
                 snakegreen,
                 5,
                 5,
             )
+
 
             pygame.draw.rect(gameWindow, red, [
                              food_x, food_y, snake_size, snake_size])
